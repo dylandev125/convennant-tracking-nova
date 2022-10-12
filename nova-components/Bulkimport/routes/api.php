@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Axistrustee\Bulkimport\Http\Controllers\BulkimportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,5 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function (Request $request) {
 //     //
 // });
+
+Route::post('/insertdata', 'Axistrustee\Bulkimport\Http\Controllers\BulkimportController@insertData');

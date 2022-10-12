@@ -23,15 +23,70 @@
 </template>
 
 <script>
+import Papa from 'papaparse';
+
 export default {
   mounted() {
+    
     //
   },
   methods: {
-    handleFilesUpload(){
-        this.files = this.$refs.files.files;
-        console.log(this.files)
+    handleFilesUpload(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      Papa.parse(files[0], {
+        header: true,
+        complete: this.onComplete,
+        // error: undefined,
+        skipEmptyLines: true,
+        delimitersToGuess: [
+          ",",
+          "\t",
+          "|",
+          ";",
+          Papa.RECORD_SEP,
+          Papa.UNIT_SEP,
+        ],
+      });
     },
+
+    onComplete(results, file) {
+      console.log(results.data);
+
+      var data_fields = ['clcode', 'isin', 'clientReference', 'secured', 'frequency', 'startDate', 'dueDate', 'type', 'subType', 'comments', 'targetValue', 'priority', 'mailCC', 'user', 'organization', 'docName', 'description', 'isCustomCovenant'];
+      var mandatory_fields = ['clcode', 'clientReference', 'secured', 'frequency', 'startDate', 'dueDate', 'type', 'subType', 'targetValue', 'user', 'organization', 'docName', 'isCustomCovenant'];
+
+      const formDataObj = Object.fromEntries(results.data.entries());
+      let form_data = new FormData();
+      
+      let result = {}
+
+      for (let row of results.data) {
+        for(let key2 of mandatory_fields) {
+          if ( row[key2] === '' ) {
+            return;
+          }
+        }
+        
+        for (let key of data_fields) {
+          if(!Array.isArray(result[key])) {
+            result[key] = []
+          }
+          result[key].push(row[key])
+        }
+      }
+
+      for (let field of data_fields) {
+        form_data.append(field, JSON.stringify(result[field]))
+      }
+
+      form_data.append('length', results.data.length)
+
+      Nova.request()
+        .post('/nova-vendor/bulkimport/insertdata', form_data)
+        .then((res) => {
+          console.log(res.data)
+        });
+    },    
   },
   data() {
     return {
