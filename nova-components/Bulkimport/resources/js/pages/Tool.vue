@@ -61,12 +61,12 @@ export default {
       let result = {}
 
       for (let row of results.data) {
-        for(let key2 of mandatory_fields) {
-          if ( row[key2] === '' ) {
-            return;
-          }
-        }
-        
+        // for(let key2 of mandatory_fields) {
+        //   if ( row[key2] === '' ) {
+        //     return;
+        //   }
+        // }
+
         for (let key of data_fields) {
           if(!Array.isArray(result[key])) {
             result[key] = []

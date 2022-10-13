@@ -50,29 +50,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var row = _step.value;
 
-          var _iterator2 = _createForOfIteratorHelper(mandatory_fields),
+          // for(let key2 of mandatory_fields) {
+          //   if ( row[key2] === '' ) {
+          //     return;
+          //   }
+          // }
+          var _iterator2 = _createForOfIteratorHelper(data_fields),
               _step2;
 
           try {
             for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-              var key2 = _step2.value;
-
-              if (row[key2] === '') {
-                return;
-              }
-            }
-          } catch (err) {
-            _iterator2.e(err);
-          } finally {
-            _iterator2.f();
-          }
-
-          var _iterator3 = _createForOfIteratorHelper(data_fields),
-              _step3;
-
-          try {
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var key = _step3.value;
+              var key = _step2.value;
 
               if (!Array.isArray(result[key])) {
                 result[key] = [];
@@ -81,9 +69,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               result[key].push(row[key]);
             }
           } catch (err) {
-            _iterator3.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator3.f();
+            _iterator2.f();
           }
         }
       } catch (err) {
